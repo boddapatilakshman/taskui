@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Box</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .quiz-container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    .question {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    .answers {
+      margin-bottom: 20px;
+    }
+    .answers button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .answers button:hover {
+      background: #0056b3;
+    }
+    .result {
+      font-size: 1.2em;
+      color: green;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div id="quiz">
+      <div class="question" id="question">Question will appear here</div>
+      <div class="answers" id="answers"></div>
+      <div class="result" id="result">Result will appear here</div>
+      <button id="next" style="display:none;">Next Question</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+<script>
+  const quizData = [
+  {
+    question: "What is the capital of France?",
+    options: ["Berlin", "Madrid", "Paris", "Rome"],
+    correct: 2, // Index of the correct answer
+  },
+  {
+    question: "Which programming language is used for web development?",
+    options: ["Python", "JavaScript", "C++", "Java"],
+    correct: 1,
+  },
+  {
+    question: "What is 2 + 2?",
+    options: ["3", "4", "5", "6"],
+    correct: 1,
+  },
+];
+
+let currentQuestionIndex = 0;
+let score = 0;
+
+const questionEl = document.getElementById("question");
+const answersEl = document.getElementById("answers");
+const resultEl = document.getElementById("result");
+const nextButton = document.getElementById("next");
+
+function loadQuestion() {
+  const currentQuestion = quizData[currentQuestionIndex];
+  questionEl.textContent = currentQuestion.question;
+  answersEl.innerHTML = "";
+
+  currentQuestion.options.forEach((option, index) => {
+    const button = document.createElement("button");
+    button.textContent = option;
+    button.addEventListener("click", () => checkAnswer(index));
+    answersEl.appendChild(button);
+  });
+}
+
+function checkAnswer(selectedIndex) {
+  const currentQuestion = quizData[currentQuestionIndex];
+  if (selectedIndex === currentQuestion.correct) {
+    score++;
+    resultEl.textContent = "Correct!";
+    resultEl.style.color = "green";
+  } else {
+    resultEl.textContent = "Wrong! The correct answer was: " + 
+      currentQuestion.options[currentQuestion.correct];
+    resultEl.style.color = "red";
+  }
+
+  resultEl.style.display = "block";
+  nextButton.style.display = "block";
+
+  // Disable buttons after answering
+  Array.from(answersEl.children).forEach((button) => {
+    button.disabled = true;
+  });
+}
+
+nextButton.addEventListener("click", () => {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < quizData.length) {
+    resultEl.style.display = "none";
+    nextButton.style.display = "none";
+    loadQuestion();
+  } else {
+    showFinalScore();
+  }
+});
+
+function showFinalScore() {
+  questionEl.textContent = `Quiz Over! You scored ${score} out of ${quizData.length}`;
+  answersEl.innerHTML = "";
+  nextButton.style.display = "none";
+}
+
+loadQuestion();
+
+</script>

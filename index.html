@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+.rad{
+    background-color: brown;
+    padding: 20px;
+}
+.but1{
+    padding: 20px;
+    width: 200px;
+    background-color: blue;
+}
+.but2{
+    padding: 20px;
+    width: 200px;
+    background-color: blue;
+}
+    </style>
+</head>
+<body>
+    <table>
+        <th>Advanced Javascript Quiz</th>
+        <tr>
+            <td><input type="text" placeholder="enter your name" size="50px" class="question"></td></tr>
+        <tr>
+            <td><button class="rad">random name</button></td></tr>
+        <tr>
+            <td><button class="but1">start Quiz</button></td></tr>
+            <tr>
+                <td><button class="but2">view high score</button></td>
+            </tr>
+    </table>
+</body>
+</html>
+<script>
+    const quizData = [
+  {
+    question: "What is the capital of France?",
+    rad: ["Berlin", "Madrid", "Paris", "Rome"],
+    but1: 2, // Index of the correct answer
+  },
+  {
+    question: "Which programming language is used for web development?",
+    rad: ["Python", "JavaScript", "C++", "Java"],
+    but1: 1,
+  },
+  {
+    question: "What is 2 + 2?",
+    rad1: ["3", "4", "5", "6"],
+    but1: 1,
+  },
+];
+let currentQuestionIndex = 0;
+let score = 0;
+
+const questionEl = document.getElementsByClassName("question");
+const answersEl = document.getElementsByClassName("rad");
+const resultEl = document.getElementsByClassName("but1");
+const nextButton = document.getElementsByClassName("but2");
+function loadQuestion() {
+  const currentQuestion = quizData[currentQuestionIndex];
+  questionEl.textContent = currentQuestion.question;
+  answersEl.innerHTML = "";
+
+  currentQuestion.options.forEach((option, index) => {
+    const button = document.createElement("button");
+    button.textContent = option;
+    button.addEventListener("click", () => checkAnswer(index));
+    answersEl.appendChild(button);
+  });
+}
+nextButton.addEventListener("click", () => {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < quizData.length) {
+    resultEl.style.display = "none";
+    nextButton.style.display = "none";
+    loadQuestion();
+  } else {
+    showFinalScore();
+  }
+});
+
+</script>
